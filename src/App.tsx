@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import Box from '@mui/material/Box';
 import './App.css';
-import TopBar from "./components/TopBar.tsx";
+import TopBar from "./components/TopBar";
 
 function App() {
     /**

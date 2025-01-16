@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import theme from '../styles/theme.ts';
+import theme from '../styles/theme';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,18 +10,24 @@ import Link from "@mui/material/Link";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import LoginForm from "./LoginForm.tsx";
-import SignupForm from "./SignupForm.tsx"
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 
-
-function TopBar(isAuthenticated, setIsAuthenticated, username, setUsername) : React.JSX.Element {
+interface TopBarProps {
+    isAuthenticated: boolean;
+    setIsAuthenticated:  React.Dispatch<React.SetStateAction<boolean>>
+    username: string | null;
+    setUsername:  React.Dispatch<React.SetStateAction<string | null>>;
+}
+const TopBar: React.FC<TopBarProps> = ({isAuthenticated, setIsAuthenticated, username, setUsername}) => {
     const [open, setOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    console.log(isAuthenticated)
+    console.log(isAuthenticated);
+
     return (
         <Box className="TopBar" sx={{ flexGrow: 1 }}>
             <ThemeProvider theme={theme}>
@@ -33,9 +39,9 @@ function TopBar(isAuthenticated, setIsAuthenticated, username, setUsername) : Re
                         {isAuthenticated ?
                             <>
                                 <Typography>{username}</Typography>
-                                <Button color="inherit">Logout</Button>
+                                <Button color="inherit" onClick={() => setIsAuthenticated(false)}>Logout</Button>
                             </> :
-                            <Button color="inherit">Login</Button>}
+                            <Button color="inherit" onClick={handleOpen}>Login</Button>}
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>
@@ -44,9 +50,9 @@ function TopBar(isAuthenticated, setIsAuthenticated, username, setUsername) : Re
                 <DialogTitle>{isLogin ? "Login" : "Signup"}</DialogTitle>
                 <DialogContent>
                     {isLogin ? (
-                        <LoginForm setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} onSwitch={() => setIsLogin(false)}/>
+                        <LoginForm handleClose={handleClose} setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} onSwitch={() => setIsLogin(false)}/>
                     ) : (
-                        <SignupForm onSwitch={() => setIsLogin(true)}/>
+                        <SignupForm handleClose={handleClose} setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} onSwitch={() => setIsLogin(true)}/>
                     )}
                 </DialogContent>
             </Dialog>

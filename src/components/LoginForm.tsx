@@ -5,11 +5,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 interface LoginFormProps {
+    handleClose: () => void,
     setIsAuthenticated:  React.Dispatch<React.SetStateAction<boolean>>
-    setUsername:  React.Dispatch<React.SetStateAction<string>>
-    onSwitch:  React.Dispatch<React.SetStateAction<boolean>>
+    setUsername:  React.Dispatch<React.SetStateAction<string | null>>
+    onSwitch:  () => void
 }
-const LoginForm: React.FC = ({setIsAuthenticated, setUsername, onSwitch}) => {
+const LoginForm: React.FC<LoginFormProps> = ({handleClose, setIsAuthenticated, setUsername, onSwitch}) => {
 
     /**
      * State used to sign in
@@ -20,10 +21,13 @@ const LoginForm: React.FC = ({setIsAuthenticated, setUsername, onSwitch}) => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/login", localUsername);
+            const response = await axios.post("http://localhost:8080/login", {
+                username: localUsername
+            });
             setIsAuthenticated(true);
             setUsername(response.data.username);
             setMessage("Login Successful!");
+            handleClose();
         } catch (err: unknown){
             if (isAxiosError(err)) {
                 setMessage(err.response?.data?.error);
@@ -48,7 +52,13 @@ const LoginForm: React.FC = ({setIsAuthenticated, setUsername, onSwitch}) => {
             <Typography>
                 Don't have an account?
             </Typography>
-            <Typography onClick={onSwitch}>
+            <Typography onClick={onSwitch}
+                         variant="body2"
+                         sx={{
+                             cursor: "pointer",
+                             color: "primary.main",
+                             "&:hover": { textDecoration: "underline" },
+                         }}>
                 Sign up
             </Typography>
         </form>
