@@ -1,7 +1,11 @@
 import {useState} from 'react';
-import Box from '@mui/material/Box';
 import './App.css';
 import TopBar from "./components/TopBar";
+import HomePage from "./components/HomePage";
+import {ThemeProvider} from "@mui/material/styles";
+import {CssBaseline} from "@mui/material";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import theme from "./styles/theme";
 
 function App() {
     /**
@@ -22,10 +26,25 @@ function App() {
         setUsername(null);
     }
     return (
-        <Box className="Main">
-        <TopBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}  setUsername={setUsername} />
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <Router>
+                <TopBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}  setUsername={setUsername} />
+                <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    {/* Placeholder for future routes */}
+                    {/* Add My Threads Page */}
+                    {/* <Route path="/my-threads" element={<MyThreadsPage />} /> */}
 
-    </Box>
+                    {/* Add Thread Details Page */}
+                    {/* <Route path="/threads/:id" element={<ThreadDetailsPage />} /> */}
+
+                    {/* Add Login and Signup Pages */}
+                    {/* <Route path="/login" element={<LoginPage />} /> */}
+                    {/* <Route path="/signup" element={<SignupPage />} /> */}
+                </Routes>
+            </Router>
+        </ThemeProvider>
 );
 }
 

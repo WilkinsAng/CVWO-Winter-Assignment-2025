@@ -10,8 +10,8 @@ import Link from "@mui/material/Link";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
+import LoginForm from "./Auth/LoginForm";
+import SignupForm from "./Auth/SignupForm";
 
 interface TopBarProps {
     isAuthenticated: boolean;
@@ -19,14 +19,12 @@ interface TopBarProps {
     username: string | null;
     setUsername:  React.Dispatch<React.SetStateAction<string | null>>;
 }
-const TopBar: React.FC<TopBarProps> = ({isAuthenticated, setIsAuthenticated, username, setUsername}) => {
+const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: TopBarProps) => {
     const [open, setOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    console.log(isAuthenticated);
 
     return (
         <Box className="TopBar" sx={{ flexGrow: 1 }}>
