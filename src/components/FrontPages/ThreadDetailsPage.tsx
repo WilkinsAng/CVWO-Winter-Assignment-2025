@@ -8,8 +8,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Threads from "../../models/threads";
 import Comments from "../../models/comments";
-import {mockComments} from "../../mock/mockComments";
 import CommentDetailsPage from "./CommentDetailsPage";
+import axios from "axios";
 
 interface ThreadDetailsPageProps {
     threadOpen: boolean,
@@ -19,9 +19,17 @@ interface ThreadDetailsPageProps {
 const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handleCloseDialog, selectedThread}) => {
 
     const [comments, setComments] = useState<Comments[]>([]);
-
+    const [error, setError] = useState<string | null>(null);
     useEffect(() => {
-        setComments(mockComments);
+        axios.get(`http://localhost:8080/threads/${selectedThread?.id}/comments`)
+            .then(res => {
+                setComments(res.data.comments || []);
+                setError(null);
+            })
+            .catch(err => {
+                setError("Failed to fetch comments")
+                console.error("Error fetching comments:", err);
+            })
     }, [selectedThread])
 
     return (

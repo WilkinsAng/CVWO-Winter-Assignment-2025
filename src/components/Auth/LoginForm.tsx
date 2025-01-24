@@ -3,7 +3,6 @@ import axios, {isAxiosError} from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {mockUsers} from "../../mock/mockUsers";
 
 interface LoginFormProps {
     handleClose: () => void,

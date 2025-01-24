@@ -13,14 +13,16 @@ import Button from "@mui/material/Button";
 import ThreadDetailsPage from "../FrontPages/ThreadDetailsPage";
 import UpdateThreadForm from "./UpdateThreadForm";
 import Comments from "../../models/comments";
+import UpdateCommentForm from "./UpdateCommentForm";
+import Threads from "../../models/threads";
 
 const MyCommentsPage = () => {
     const [comments, setComments] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [updateOpen, setUpdateOpen] = useState(false);
     const [threadOpen, setThreadOpen] = useState(false);
-    const [selectedComment, setSelectedComment] = useState<any | null>(null);
-    const [selectedThread, setSelectedThread] = useState<any | null>(null);
+    const [selectedComment, setSelectedComment] = useState<Comments | null>(null);
+    const [selectedThread, setSelectedThread] = useState<Threads| null>(null);
 
     const userID = localStorage.getItem("userID");
     // Fetch comments for the logged-in user
@@ -141,10 +143,10 @@ const MyCommentsPage = () => {
                 handleCloseDialog={() => setThreadOpen(false)}
                 selectedThread={selectedThread}
             />
-            <UpdateThreadForm
+            <UpdateCommentForm
                 updateOpen={updateOpen}
-                handleUpdateThreadClose={() => setUpdateOpen(false)}
-                selectedThread={selectedComment} // Repurpose UpdateThreadForm for comments
+                handleUpdateCommentClose={() => setUpdateOpen(false)}
+                selectedComment={selectedComment}
                 onUpdateSuccess={onUpdateSuccess}
             />
         </Box>

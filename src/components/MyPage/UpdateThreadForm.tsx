@@ -10,6 +10,7 @@ import {DialogActions, FormControl, InputLabel, MenuItem, Select} from "@mui/mat
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Categories from "../../models/categories";
+import Typography from "@mui/material/Typography";
 
 interface UpdateThreadFormProps {
     updateOpen: boolean;
@@ -26,10 +27,11 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                                                            }) => {
     const [title, setTitle] = useState(selectedThread?.title || "");
     const [content, setContent] = useState(selectedThread?.content || "");
-    const [categoryID, setCategoryID] = useState<number | null>(selectedThread?.categoryId || null);
-    const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+    const [categoryID, setCategoryID] = useState<number | null>(selectedThread?.category_id || null);
+    const [categories, setCategories] = useState<Categories[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    const userID = localStorage.getItem("userID")
     // Fetch categories when the dialog opens
     useEffect(() => {
         if (updateOpen) {
@@ -45,7 +47,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
         if (selectedThread) {
             setTitle(selectedThread.title);
             setContent(selectedThread.content);
-            setCategoryID(selectedThread.categoryId);
+            setCategoryID(selectedThread.category_id);
         }
     }, [selectedThread]);
 
@@ -54,10 +56,16 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
 
         try {
             const response = await axios.patch(`http://localhost:8080/threads/${selectedThread.id}`, {
-                title,
-                content,
-                categoryID,
-            });
+                    title,
+                    content,
+                },
+                {
+                    headers: {
+                        "userID": userID,
+                        "Content-Type": "application/json"
+                    }
+
+                });
             onUpdateSuccess(response.data.thread); // Notify parent of the update
             handleUpdateThreadClose();
         } catch (err) {
@@ -66,6 +74,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
         }
     };
 
+    console.log(selectedThread)
     return (
         <Dialog open={updateOpen} onClose={handleUpdateThreadClose} fullWidth>
             <DialogTitle>Update Thread</DialogTitle>
@@ -89,20 +98,9 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                         rows={4}
                         required
                     />
-                    <FormControl fullWidth margin="normal" required>
-                        <InputLabel id="category-label">Category</InputLabel>
-                        <Select
-                            labelId="category-label"
-                            value={categoryID || ""}
-                            onChange={(e) => setCategoryID(Number(e.target.value))}
-                        >
-                            {categories.map((category: Categories) => (
-                                <MenuItem key={category.id} value={category.id}>
-                                    {category.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                        <Typography variant="body1">
+                            <strong>Category:</strong> {categories.find((cat) => cat.id === selectedThread?.category_id)?.name}
+                        </Typography>
                 </Box>
                 {error && (
                     <Alert severity="error" sx={{ mt: 2 }}>
