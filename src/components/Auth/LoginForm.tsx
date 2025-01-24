@@ -3,6 +3,7 @@ import axios, {isAxiosError} from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import {mockUsers} from "../../mock/mockUsers";
 
 interface LoginFormProps {
     handleClose: () => void,
@@ -24,8 +25,11 @@ const LoginForm: React.FC<LoginFormProps> = ({handleClose, setIsAuthenticated, s
             const response = await axios.post("http://localhost:8080/login", {
                 username: localUsername
             });
+            const {user_id, username} = response.data.user;
+            localStorage.setItem("userID", user_id);
+            localStorage.setItem("username", username);
             setIsAuthenticated(true);
-            setUsername(response.data.username);
+            setUsername(username);
             setMessage("Login Successful!");
             handleClose();
         } catch (err: unknown){

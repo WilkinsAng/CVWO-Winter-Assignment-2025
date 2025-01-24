@@ -26,20 +26,42 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const handleLogout = () => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("userID");
+        setIsAuthenticated(false);
+        setUsername(null);
+    }
     return (
         <Box className="TopBar" sx={{ flexGrow: 1 }}>
             <ThemeProvider theme={theme}>
                 <AppBar position="static" color="primary">
                     <Toolbar disableGutters>
-                        <Link href="/" underline="none" variant="h4" color="inherit">
-                            Gossip
+                        <Link
+                            href="/"
+                            underline="hover"
+                            variant="h5"
+                            color="inherit"
+                            sx={{margin: "7px", padding: "7px"}}
+                        >
+                            BinaryBuilders
                         </Link>
                         {isAuthenticated ?
                             <>
                                 <Typography>{username}</Typography>
-                                <Button color="inherit" onClick={() => setIsAuthenticated(false)}>Logout</Button>
+                                <Button
+                                    color="inherit"
+                                    onClick={handleLogout}
+                                    sx={{justifyContent: "flex-end", margin: "auto"}}>
+                                    Logout
+                                </Button>
                             </> :
-                            <Button color="inherit" onClick={handleOpen}>Login</Button>}
+                            <Button
+                                color="inherit"
+                                onClick={handleOpen}
+                                sx={{justifyContent: "end", margin: "auto"}}>
+                                Login
+                            </Button>}
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>

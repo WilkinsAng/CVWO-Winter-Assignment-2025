@@ -1,11 +1,12 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 import TopBar from "./components/TopBar";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/FrontPages/HomePage";
 import {ThemeProvider} from "@mui/material/styles";
 import {CssBaseline} from "@mui/material";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import theme from "./styles/theme";
+import MyThreadsPage from "./components/MyPage/MyThreads";
 
 function App() {
     /**
@@ -16,15 +17,14 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [username, setUsername] = useState<string | null>(null);
 
-    const handleLogin = (user: string) => {
-        setUsername(user);
-        setIsAuthenticated(true);
-    }
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+        if (storedUsername) {
+            setUsername(storedUsername);
+            setIsAuthenticated(true);
+        }
+    }, []);
 
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        setUsername(null);
-    }
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
@@ -32,9 +32,10 @@ function App() {
                 <TopBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}  setUsername={setUsername} />
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
+                    <Route path="/my-threads" element={<MyThreadsPage/>} />
                     {/* Placeholder for future routes */}
-                    {/* Add My Threads Page */}
-                    {/* <Route path="/my-threads" element={<MyThreadsPage />} /> */}
+
+
 
                     {/* Add Thread Details Page */}
                     {/* <Route path="/threads/:id" element={<ThreadDetailsPage />} /> */}

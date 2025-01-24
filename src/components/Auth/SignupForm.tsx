@@ -21,8 +21,11 @@ const SignupForm: React.FC<SignupFormProps> = ({handleClose, setIsAuthenticated,
             const response = await axios.post("http://localhost:8080/signup", {
                 username: localUsername
             });
+            const {user_id, username} = response.data.user;
+            localStorage.setItem("userID", user_id);
+            localStorage.setItem("username", username);
             setIsAuthenticated(true);
-            setUsername(response.data.username);
+            setUsername(username);
             setMessage("Signup Successful!");
             handleClose();
         } catch (err: unknown){
