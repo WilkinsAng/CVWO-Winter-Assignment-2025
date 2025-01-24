@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {ThemeProvider} from "@mui/material/styles";
 import Link from "@mui/material/Link";
+import {Link as RouterLink} from "react-router-dom"
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -38,7 +39,8 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
                 <AppBar position="static" color="primary">
                     <Toolbar disableGutters>
                         <Link
-                            href="/"
+                            component={RouterLink}
+                            to="/"
                             underline="hover"
                             variant="h5"
                             color="inherit"
@@ -46,8 +48,25 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
                         >
                             BinaryBuilders
                         </Link>
+
                         {isAuthenticated ?
                             <>
+                                <Button color="inherit">
+                                    <Link component={RouterLink}
+                                          to="/my-threads"
+                                          underline="none"
+                                          color="inherit">
+                                        My Threads
+                                    </Link>
+                                </Button>
+                                <Button color="inherit">
+                                    <Link component={RouterLink}
+                                          to="/my-comments"
+                                          underline="none"
+                                          color="inherit">
+                                        My Comments
+                                    </Link>
+                                </Button>
                                 <Typography>{username}</Typography>
                                 <Button
                                     color="inherit"

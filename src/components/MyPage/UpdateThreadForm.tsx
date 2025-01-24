@@ -26,7 +26,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                                                            }) => {
     const [title, setTitle] = useState(selectedThread?.title || "");
     const [content, setContent] = useState(selectedThread?.content || "");
-    const [categoryID, setCategoryID] = useState<number | null>(selectedThread?.categoryID || null);
+    const [categoryID, setCategoryID] = useState<number | null>(selectedThread?.categoryId || null);
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -45,7 +45,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
         if (selectedThread) {
             setTitle(selectedThread.title);
             setContent(selectedThread.content);
-            setCategoryID(selectedThread.categoryID);
+            setCategoryID(selectedThread.categoryId);
         }
     }, [selectedThread]);
 

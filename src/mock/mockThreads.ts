@@ -10,7 +10,7 @@ export const mockThreads: Threads[] = [
         updatedAt: "2025-01-04T09:00:00Z",
         likes: 12,
         dislikes: 2,
-        categoryID: 1,
+        categoryId: 1,
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ export const mockThreads: Threads[] = [
         updatedAt: "2025-01-06T11:00:00Z",
         likes: 8,
         dislikes: 1,
-        categoryID: 1,
+        categoryId: 1,
     },
     {
         id: 3,
@@ -32,6 +32,6 @@ export const mockThreads: Threads[] = [
         updatedAt: "2025-01-07T10:00:00Z",
         likes: 15,
         dislikes: 3,
-        categoryID: 1,
+        categoryId: 1,
     },
 ];

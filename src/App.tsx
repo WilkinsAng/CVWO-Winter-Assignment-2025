@@ -7,6 +7,7 @@ import {CssBaseline} from "@mui/material";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import theme from "./styles/theme";
 import MyThreadsPage from "./components/MyPage/MyThreads";
+import MyCommentsPage from "./components/MyPage/MyComments"
 
 function App() {
     /**
@@ -32,7 +33,8 @@ function App() {
                 <TopBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}  setUsername={setUsername} />
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
-                    <Route path="/my-threads" element={<MyThreadsPage/>} />
+                    <Route path="/my-threads" element={<MyThreadsPage/>}/>
+                    <Route path="/my-comments" element={<MyCommentsPage/>}/>
                     {/* Placeholder for future routes */}
 
 

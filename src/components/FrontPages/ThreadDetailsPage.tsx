@@ -58,7 +58,7 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
                     }}>
                     {comments.length > 0 ?
                         comments.map((comment: Comments) => (
-                            <CommentDetailsPage comment={comment}/>
+                            <CommentDetailsPage key={comment.id} comment={comment}/>
                         )) :
                         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                             No comments yet.

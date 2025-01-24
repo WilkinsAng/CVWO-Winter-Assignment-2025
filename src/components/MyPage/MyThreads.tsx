@@ -55,6 +55,10 @@ const MyThreadsPage = () => {
         }
         axios.get(`http://localhost:8080/users/${userID}/threads`)
             .then((res) => {
+                if (res.data.threads == null){
+                    setThreads([]);
+                    return
+                }
                 setThreads(res.data.threads);
             })
             .catch((error) => {
@@ -63,7 +67,6 @@ const MyThreadsPage = () => {
             });
     }, [userID]);
 
-    console.log(threads);
     const handleDeleteThread = (threadId: number) => {
         axios.delete(`http://localhost:8080/threads/${threadId}`)
             .then(() => setThreads(threads.filter((thread) => thread.id !== threadId)))

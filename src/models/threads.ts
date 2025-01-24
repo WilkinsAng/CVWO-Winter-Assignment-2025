@@ -7,7 +7,7 @@ interface Threads {
     updatedAt: string;
     likes: number;
     dislikes: number;
-    categoryID: number;
+    categoryId: number;
 }
 
 export default Threads;
