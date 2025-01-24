@@ -14,7 +14,7 @@ interface UpdateCommentFormProps {
     updateOpen: boolean;
     handleUpdateCommentClose: () => void;
     selectedComment: Comments | null; // Comment details
-    onUpdateSuccess: (updatedComment: { id: number; content: string }) => void; // Callback for successful update
+    onUpdateSuccess: (updatedComment: Comments) => void; // Callback for successful update
 }
 
 const UpdateCommentForm: React.FC<UpdateCommentFormProps> = ({
@@ -26,6 +26,7 @@ const UpdateCommentForm: React.FC<UpdateCommentFormProps> = ({
     const [content, setContent] = useState<string>(selectedComment?.content || ""); // Prefill the content
     const [error, setError] = useState<string | null>(null);
 
+    const userID = localStorage.getItem("userID")
     // Reset form values when the selectedComment changes
     useEffect(() => {
         if (selectedComment) {
@@ -39,7 +40,12 @@ const UpdateCommentForm: React.FC<UpdateCommentFormProps> = ({
         try {
             const response = await axios.patch(
                 `http://localhost:8080/comments/${selectedComment.id}`,
-                { content }
+                { content } ,
+                {
+                    headers: {
+                        "userID": userID,
+                        "Content-Type": "application/json"
+                    }}
             );
             onUpdateSuccess(response.data.comment); // Notify parent of the update
             handleUpdateCommentClose(); // Close the dialog

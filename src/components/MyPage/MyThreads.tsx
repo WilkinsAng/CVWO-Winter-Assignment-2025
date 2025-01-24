@@ -68,7 +68,12 @@ const MyThreadsPage = () => {
     }, [userID]);
 
     const handleDeleteThread = (threadId: number) => {
-        axios.delete(`http://localhost:8080/threads/${threadId}`)
+        axios.delete(`http://localhost:8080/threads/${threadId}`,
+            {
+                headers: {
+                    "userID": userID,
+                    "Content-Type": "application/json"
+                }})
             .then(() => setThreads(threads.filter((thread) => thread.id !== threadId)))
             .catch((error) => console.error("Error deleting thread:", error));
     };

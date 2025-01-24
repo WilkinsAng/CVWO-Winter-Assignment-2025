@@ -11,7 +11,6 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import ThreadDetailsPage from "../FrontPages/ThreadDetailsPage";
-import UpdateThreadForm from "./UpdateThreadForm";
 import Comments from "../../models/comments";
 import UpdateCommentForm from "./UpdateCommentForm";
 import Threads from "../../models/threads";
@@ -35,7 +34,7 @@ const MyCommentsPage = () => {
         axios
             .get(`http://localhost:8080/users/${userID}/comments`) // Replace with your API endpoint for fetching comments
             .then((res) => {
-                setComments(res.data.comments);
+                setComments(res.data.comments || []);
             })
             .catch((error) => {
                 setError(error.response?.data?.error || "Failed to fetch comments.");
@@ -46,7 +45,11 @@ const MyCommentsPage = () => {
     // Handle comment deletion
     const handleDeleteComment = (commentId: number) => {
         axios
-            .delete(`http://localhost:8080/comments/${commentId}`)
+            .delete(`http://localhost:8080/comments/${commentId}`, {
+                headers: {
+                    "userID": userID,
+                    "Content-Type": "application/json"
+                }})
             .then(() => {
                 setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
             })
@@ -54,7 +57,7 @@ const MyCommentsPage = () => {
     };
 
     // Handle comment update success
-    const onUpdateSuccess = (updatedComment: any) => {
+    const onUpdateSuccess = (updatedComment: Comments) => {
         setComments((prevComments) =>
             prevComments.map((comment) =>
                 comment.id === updatedComment.id ? updatedComment : comment
