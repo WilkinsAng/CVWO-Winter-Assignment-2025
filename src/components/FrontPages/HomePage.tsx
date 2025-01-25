@@ -135,7 +135,9 @@ const HomePage: React.FC = () => {
                 onCreateSuccess={onCreateSuccess}/>
             {/* Category Filter */}
             <FilterButton categories={categories} setPage={setPage} categoryID={categoryID} setCategoryID={setCategoryID} catError={catError} />
-            {threads.map((thread: Threads) => (
+            {threads.length === 0 ?
+                <Alert severity="info">No threads found for the selected category. Start creating some!</Alert> :
+                threads.map((thread: Threads) => (
                 <Card key={thread.id}
                       sx={{ marginBottom: 2, cursor: "pointer", "&:hover": {boxShadow: 6}}}
                       onClick={() => handleThreadOpen(thread)}>

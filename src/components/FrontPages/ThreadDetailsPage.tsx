@@ -36,6 +36,9 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
         }
     }, [selectedThread])
 
+    const onCreateComment = (newComment: Comments) => {
+        setComments((prevComments) => [newComment, ...prevComments]);
+    }
     return (
         <Dialog
             open={threadOpen}
@@ -61,6 +64,7 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
                 <Typography variant="h6" sx={{ mt: 2 }}>
                     Comments
                 </Typography>
+                <CreateCommentForm selectedThread={selectedThread} onCreateComment={onCreateComment}/>
                 <Box sx={{
                         maxHeight: 400,
                         overflowY: "auto",
@@ -77,7 +81,6 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
                         </Typography>
                     }
                 </Box>
-                <CreateCommentForm/>
             </DialogContent>
         </Dialog>
     )

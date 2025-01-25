@@ -1,9 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Categories from "../../models/categories";
-import axios from "axios";
-import Threads from "../../models/threads";
 import Alert from "@mui/material/Alert";
 
 interface FilterButtonProps {
