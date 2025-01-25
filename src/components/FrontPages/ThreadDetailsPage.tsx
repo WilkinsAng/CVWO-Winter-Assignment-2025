@@ -10,6 +10,7 @@ import Threads from "../../models/threads";
 import Comments from "../../models/comments";
 import CommentDetailsPage from "./CommentDetailsPage";
 import axios from "axios";
+import CreateCommentForm from "./CreateCommentForm";
 
 interface ThreadDetailsPageProps {
     threadOpen: boolean,
@@ -21,15 +22,18 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
     const [comments, setComments] = useState<Comments[]>([]);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
-        axios.get(`http://localhost:8080/threads/${selectedThread?.id}/comments`)
-            .then(res => {
-                setComments(res.data.comments || []);
-                setError(null);
-            })
-            .catch(err => {
-                setError("Failed to fetch comments")
-                console.error("Error fetching comments:", err);
-            })
+        if (selectedThread != null) {
+            axios.get(`http://localhost:8080/threads/${selectedThread?.id}/comments`)
+                .then(res => {
+                    setComments(res.data.comments || []);
+                    setError(null);
+                })
+                .catch(err => {
+                    setError("Failed to fetch comments")
+                    console.error("Error fetching comments:", err);
+
+                })
+        }
     }, [selectedThread])
 
     return (
@@ -73,6 +77,7 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
                         </Typography>
                     }
                 </Box>
+                <CreateCommentForm/>
             </DialogContent>
         </Dialog>
     )

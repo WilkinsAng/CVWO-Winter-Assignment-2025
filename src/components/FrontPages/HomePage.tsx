@@ -14,18 +14,43 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThreadDetailsPage from "./ThreadDetailsPage";
 import Button from "@mui/material/Button";
 import FilterButton from "./FilterButton";
+import CreateThreadForm from "./CreateThreadForm";
+import Categories from "../../models/categories";
 
 const HomePage: React.FC = () => {
+    //For loading in threads
     const [threads, setThreads] = useState<Threads[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    //For Opening a Thread Card
     const [threadOpen, setThreadOpen] = useState(false);
-    const [selectedThread, setSelectedThread] = useState<Threads | null>(null)
-    const [categoryID, setCategoryID] = useState("")
+    const [selectedThread, setSelectedThread] = useState<Threads | null>(null);
+
+    //For Filtering Buttons
+    const [categoryID, setCategoryID] = useState("");
+    const [categories, setCategories] = useState<Categories[]>([]);
+    const [catError, setCatError] = useState<string | null>(null);
+
+    //For page management
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    console.log(threads)
+    //For Creating a new Thread
+    const [createThreadOpen, setCreateThreadOpen] = useState(false);
+
+    // Fetch categories when component loads
+    useEffect(() => {
+        axios.get("http://localhost:8080/categories")
+            .then((res) => {
+                setCategories(res.data.categories);
+                setCatError(null);
+            })
+            .catch((err) => {
+                console.error("Error fetching categories:", err);
+                setCatError(err);
+            });
+    }, []);
 
     // Fetch threads when page or selectedCategory changes
     useEffect(() => {
@@ -55,6 +80,10 @@ const HomePage: React.FC = () => {
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
+    }
+
+    const onCreateSuccess = (newThread: Threads) =>{
+        setThreads((prevThreads) => [newThread, ...prevThreads])
     }
 
     const handleLike = (id: number)  => {
@@ -98,8 +127,14 @@ const HomePage: React.FC = () => {
             <Typography variant="h4" gutterBottom>
                 Threads
             </Typography>
+            <Button onClick={()=> setCreateThreadOpen(true)}> Create Thread!</Button>
+            <CreateThreadForm
+                categories={categories}
+                open={createThreadOpen}
+                onClose={() => setCreateThreadOpen(false)}
+                onCreateSuccess={onCreateSuccess}/>
             {/* Category Filter */}
-            <FilterButton setPage={setPage} categoryID={categoryID} setCategoryID={setCategoryID} setError={setError} />
+            <FilterButton categories={categories} setPage={setPage} categoryID={categoryID} setCategoryID={setCategoryID} catError={catError} />
             {threads.map((thread: Threads) => (
                 <Card key={thread.id}
                       sx={{ marginBottom: 2, cursor: "pointer", "&:hover": {boxShadow: 6}}}

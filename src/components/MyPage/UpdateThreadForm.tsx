@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Categories from "../../models/categories";
 import Typography from "@mui/material/Typography";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 interface UpdateThreadFormProps {
     updateOpen: boolean;
@@ -27,7 +28,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                                                            }) => {
     const [title, setTitle] = useState(selectedThread?.title || "");
     const [content, setContent] = useState(selectedThread?.content || "");
-    const [categoryID, setCategoryID] = useState<number | null>(selectedThread?.category_id || null);
+    const [categoryID, setCategoryID] = useState<string>(selectedThread?.category_id.toString() || "");
     const [categories, setCategories] = useState<Categories[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -47,7 +48,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
         if (selectedThread) {
             setTitle(selectedThread.title);
             setContent(selectedThread.content);
-            setCategoryID(selectedThread.category_id);
+            setCategoryID(selectedThread.category_id.toString());
         }
     }, [selectedThread]);
 
@@ -56,8 +57,9 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
 
         try {
             const response = await axios.patch(`http://localhost:8080/threads/${selectedThread.id}`, {
-                    title,
-                    content,
+                    title: title,
+                    content: content,
+                    category_id: categoryID
                 },
                 {
                     headers: {
@@ -73,8 +75,6 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
             console.error("Error updating thread:", err);
         }
     };
-
-    console.log(selectedThread)
     return (
         <Dialog open={updateOpen} onClose={handleUpdateThreadClose} fullWidth>
             <DialogTitle>Update Thread</DialogTitle>
@@ -98,9 +98,21 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                         rows={4}
                         required
                     />
-                        <Typography variant="body1">
-                            <strong>Category:</strong> {categories.find((cat) => cat.id === selectedThread?.category_id)?.name}
-                        </Typography>
+                    <FormControl required fullWidth margin="normal">
+                        <InputLabel id="category-label">Category</InputLabel>
+                        <Select
+                            labelId="category-label"
+                            value={categoryID}
+                            onChange={(e) => setCategoryID(e.target.value)}
+                            displayEmpty
+                        >
+                            {categories.map((category) => (
+                                <MenuItem key={category.id} value={category.id}>
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Box>
                 {error && (
                     <Alert severity="error" sx={{ mt: 2 }}>

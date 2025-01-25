@@ -4,34 +4,29 @@ import Box from "@mui/material/Box";
 import Categories from "../../models/categories";
 import axios from "axios";
 import Threads from "../../models/threads";
+import Alert from "@mui/material/Alert";
 
 interface FilterButtonProps {
+    categories: Categories[];
+    categoryID: string;
     setCategoryID: React.Dispatch<React.SetStateAction<string>>;
     setPage: React.Dispatch<React.SetStateAction<number>>;
-    setError: React.Dispatch<React.SetStateAction<string | null>>;
-    categoryID: string;
+    catError: string | null;
 }
-const FilterButton: React.FC<FilterButtonProps> = ({setCategoryID, setPage, setError, categoryID}) =>{
-
-    const [categories, setCategories] = useState<Categories[]>([])
+const FilterButton: React.FC<FilterButtonProps> = ({categories, categoryID, setCategoryID, setPage, catError}) =>{
 
     const handleCategoryChange = (categoryID: string) => {
         setCategoryID(categoryID);
         setPage(1); // Reset to the first page when changing category
     };
 
-    // Fetch categories when component loads
-    useEffect(() => {
-        axios.get("http://localhost:8080/categories")
-            .then((res) => {
-                setCategories(res.data.categories);
-                setError(null);
-            })
-            .catch((err) => {
-                console.error("Error fetching categories:", err);
-                setError(err);
-            });
-    }, []);
+    if (catError) {
+        return (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                <Alert severity="error">{"Unable to get categories. Please try again later." + catError}</Alert>
+            </Box>
+        )
+    }
 
     return (
         <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
