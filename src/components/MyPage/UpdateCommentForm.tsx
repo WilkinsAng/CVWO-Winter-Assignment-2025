@@ -57,9 +57,12 @@ const UpdateCommentForm: React.FC<UpdateCommentFormProps> = ({
 
     return (
         <Dialog open={updateOpen} onClose={handleUpdateCommentClose} fullWidth>
-            <DialogTitle>Update Comment</DialogTitle>
+            <DialogTitle variant="h5" fontWeight="bolder">
+                Update Comment
+            </DialogTitle>
             <DialogContent>
                 <Box sx={{ mt: 2 }}>
+                    You can edit your comment here!
                     <TextField
                         fullWidth
                         label="Comment Content"

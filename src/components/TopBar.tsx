@@ -35,6 +35,7 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
         setIsAuthenticated(false);
         setUsername(null);
     }
+
     return (
         <Box className="TopBar">
             <ThemeProvider theme={theme}>

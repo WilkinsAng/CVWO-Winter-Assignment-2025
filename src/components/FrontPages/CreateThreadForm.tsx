@@ -29,6 +29,19 @@ const CreateThreadForm: React.FC<CreateThreadProps> = ({categories, open, onClos
 
     const handleCreateThread = (e: React.FormEvent) => {
         e.preventDefault();
+        if (title.trim() === "") {
+            setError("Title cannot be empty.");
+            return;
+        }
+        if (content.trim() === "") {
+            setError("Content cannot be empty.");
+            return;
+        }
+        if (categoryID === "") {
+            setError("Please select a category.");
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
@@ -59,8 +72,11 @@ const CreateThreadForm: React.FC<CreateThreadProps> = ({categories, open, onClos
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
-            <DialogTitle>Create New Thread</DialogTitle>
+            <DialogTitle variant="h5" fontWeight="bolder">
+                Create New Thread
+            </DialogTitle>
             <DialogContent>
+                Start a new Discussion on your journey!
                 {error && (
                     <Alert severity="error" sx={{ mb: 2 }}>
                         {error}

@@ -11,13 +11,15 @@ import Comments from "../../models/comments";
 import CommentDetailsPage from "./CommentDetailsPage";
 import axios from "axios";
 import CreateCommentForm from "./CreateCommentForm";
+import Categories from "../../models/categories";
 
 interface ThreadDetailsPageProps {
-    threadOpen: boolean,
-    handleCloseDialog: () => void,
-    selectedThread: Threads | null
+    threadOpen: boolean;
+    handleCloseDialog: () => void;
+    selectedThread: Threads | null;
+    categories: Categories[];
 }
-const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handleCloseDialog, selectedThread}) => {
+const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handleCloseDialog, selectedThread, categories}) => {
 
     const [comments, setComments] = useState<Comments[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -45,41 +47,62 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
             onClose={handleCloseDialog}
             fullWidth
             maxWidth="md"
-            scroll="body">
+            scroll="body"
+        >
             <IconButton
-                sx={{justifyContent: "end", marginLeft: "auto"}}
-                onClick={handleCloseDialog}>
+                sx={{ justifyContent: "end", marginLeft: "auto" }}
+                onClick={handleCloseDialog}
+            >
                 <CloseIcon />
             </IconButton>
-            <DialogTitle id="thread-title" sx={{fontWeight: 'bold'}}>{selectedThread?.title}</DialogTitle>
+            <DialogTitle id="thread-title" sx={{ fontWeight: "bold" }}>
+                {selectedThread?.title}
+            </DialogTitle>
             <DialogContent dividers>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Posted by: <b>{selectedThread?.username}</b> |{" "}
+                    {new Date(selectedThread?.created_at || "").toLocaleDateString()}
+                </Typography>
                 <Typography variant="body1" sx={{ mb: 2 }}>
                     {selectedThread?.content}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                     Likes: {selectedThread?.likes} | Dislikes: {selectedThread?.dislikes}
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Category: {categories.find(cat => cat.id === selectedThread?.category_id)?.name || "Unknown"}
+                </Typography>
             </DialogContent>
             <DialogContent>
                 <Typography variant="h6" sx={{ mt: 2 }}>
                     Comments
                 </Typography>
-                <CreateCommentForm selectedThread={selectedThread} onCreateComment={onCreateComment}/>
-                <Box sx={{
+                <CreateCommentForm
+                    selectedThread={selectedThread}
+                    onCreateComment={onCreateComment}
+                />
+                <Box
+                    sx={{
                         maxHeight: 400,
                         overflowY: "auto",
                         borderTop: "1px solid #ccc",
                         mt: 2,
                         pt: 2,
-                    }}>
-                    {comments.length > 0 ?
+                    }}
+                >
+                    {comments.length > 0 ? (
                         comments.map((comment: Comments) => (
-                            <CommentDetailsPage key={comment.id} comment={comment}/>
-                        )) :
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                            <CommentDetailsPage key={comment.id} comment={comment} />
+                        ))
+                    ) : (
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mt: 1 }}
+                        >
                             No comments yet.
                         </Typography>
-                    }
+                    )}
                 </Box>
             </DialogContent>
         </Dialog>

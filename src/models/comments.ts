@@ -2,8 +2,9 @@ interface Comments{
     id: number;
     content: string;
     userId: number;
+    username: string;
     thread_id: number;
-    createdAt: string;
+    created_at: string;
     likes: number;
     dislikes: number;
 }

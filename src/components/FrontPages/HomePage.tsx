@@ -201,7 +201,12 @@ const HomePage: React.FC = () => {
                     Next
                 </Button>
             </Box>
-            <ThreadDetailsPage threadOpen={threadOpen} handleCloseDialog={handleThreadClose} selectedThread={selectedThread}/>
+            <ThreadDetailsPage
+                threadOpen={threadOpen}
+                handleCloseDialog={handleThreadClose}
+                selectedThread={selectedThread}
+                categories={categories}
+            />
         </Box>
     );
 }

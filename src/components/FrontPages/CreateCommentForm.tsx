@@ -68,6 +68,8 @@ const CreateCommentForm: React.FC<CreateCommentProps> = ({selectedThread, onCrea
                 color="primary"
                 onClick={handleCreateComment}
                 disabled={loading}
+                fullWidth
+                sx={{marginTop: 1}}
             >
                 {loading ? <CircularProgress size={24} /> : "Post Comment"}
             </Button>

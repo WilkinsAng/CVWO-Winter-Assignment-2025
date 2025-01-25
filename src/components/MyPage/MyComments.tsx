@@ -14,14 +14,30 @@ import ThreadDetailsPage from "../FrontPages/ThreadDetailsPage";
 import Comments from "../../models/comments";
 import UpdateCommentForm from "./UpdateCommentForm";
 import Threads from "../../models/threads";
+import Categories from "../../models/categories";
 
-const MyCommentsPage = () => {
+const MyCommentsPage: React.FC = () => {
     const [comments, setComments] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [updateOpen, setUpdateOpen] = useState(false);
     const [threadOpen, setThreadOpen] = useState(false);
     const [selectedComment, setSelectedComment] = useState<Comments | null>(null);
     const [selectedThread, setSelectedThread] = useState<Threads| null>(null);
+    const [categories, setCategories] = useState<Categories[]>([]);
+    const [catError, setCatError] = useState<string | null>(null);
+
+    // Fetch categories when component loads
+    useEffect(() => {
+        axios.get("http://localhost:8080/categories")
+            .then((res) => {
+                setCategories(res.data.categories);
+                setCatError(null);
+            })
+            .catch((err) => {
+                console.error("Error fetching categories:", err);
+                setCatError(err);
+            });
+    }, []);
 
     const userID = localStorage.getItem("userID");
     // Fetch comments for the logged-in user
@@ -92,6 +108,9 @@ const MyCommentsPage = () => {
             <Typography variant="h4" sx={{ mb: 3 }}>
                 My Comments
             </Typography>
+            <Typography variant="body1" color="text.secondary" gutterBottom>
+                Here is what you have contributed so far!
+            </Typography>
             {comments.length === 0 ? (
                 <Alert severity="info">No comments found. Start contributing to discussions!</Alert>
             ) : (
@@ -104,8 +123,11 @@ const MyCommentsPage = () => {
                         }}
                     >
                         <CardContent>
-                            <Typography variant="h6">Comment on: {comment.thread_id}</Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="h6">Comment on Thread no: {comment.thread_id}</Typography>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                {new Date(comment.created_at).toLocaleDateString()}
+                            </Typography>
+                            <Typography variant="body1">
                                 {comment.content}
                             </Typography>
                             <Typography variant="body2" sx={{ mt: 1 }}>
@@ -114,14 +136,14 @@ const MyCommentsPage = () => {
                         </CardContent>
                         <CardActions>
                             <Button
-                                size="small"
+                                size="medium"
                                 color="primary"
                                 onClick={() => handleViewThread(comment.thread_id)}
                             >
                                 View Thread
                             </Button>
                             <IconButton
-                                size="small"
+                                size="medium"
                                 color="primary"
                                 onClick={() => {
                                     setUpdateOpen(true);
@@ -145,6 +167,7 @@ const MyCommentsPage = () => {
                 threadOpen={threadOpen}
                 handleCloseDialog={() => setThreadOpen(false)}
                 selectedThread={selectedThread}
+                categories={categories}
             />
             <UpdateCommentForm
                 updateOpen={updateOpen}

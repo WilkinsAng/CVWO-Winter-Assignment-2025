@@ -77,8 +77,11 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
     };
     return (
         <Dialog open={updateOpen} onClose={handleUpdateThreadClose} fullWidth>
-            <DialogTitle>Update Thread</DialogTitle>
+            <DialogTitle variant="h5" fontWeight="bolder">
+                Update Thread
+            </DialogTitle>
             <DialogContent>
+                Edit the TextBoxes to edit your Threads
                 <Box sx={{ mt: 2 }}>
                     <TextField
                         fullWidth
