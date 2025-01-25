@@ -1,8 +1,11 @@
-import React from "react";
-import Button from "@mui/material/Button";
+import React, {useState} from "react";
 import Box from "@mui/material/Box";
 import Categories from "../../models/categories";
 import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import FilterListIcon from '@mui/icons-material/FilterList';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 interface FilterButtonProps {
     categories: Categories[];
@@ -13,37 +16,59 @@ interface FilterButtonProps {
 }
 const FilterButton: React.FC<FilterButtonProps> = ({categories, categoryID, setCategoryID, setPage, catError}) =>{
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+
     const handleCategoryChange = (categoryID: string) => {
         setCategoryID(categoryID);
-        setPage(1); // Reset to the first page when changing category
+        setPage(1);
+        handleMenuClose();
     };
 
     if (catError) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <Alert severity="error">{"Unable to get categories. Please try again later." + catError}</Alert>
+                <Alert severity="error">{"Unable to get categories. Please try again later."}</Alert>
             </Box>
         )
     }
 
     return (
-        <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-            <Button
-                variant={categoryID === "" ? "contained" : "outlined"}
-                onClick={() => handleCategoryChange("")}
+        <>
+            <IconButton onClick={handleMenuOpen} size="large">
+                <FilterListIcon fontSize="large"/>
+            </IconButton>
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
             >
-                All Categories
-            </Button>
-            {categories.map((category) => (
-                <Button
-                    key={category.id}
-                    variant={categoryID === category.id.toString() ? "contained" : "outlined"}
-                    onClick={() => handleCategoryChange(category.id.toString())}
+                <MenuItem
+                    onClick={() => handleCategoryChange("")}
+                    selected={categoryID === ""}
                 >
-                    {category.name}
-                </Button>
-            ))}
-        </Box>
+                    All Categories
+                </MenuItem>
+                {categories.map((category) => (
+                    <MenuItem
+                        key={category.id}
+                        onClick={() => handleCategoryChange(category.id.toString())}
+                        selected={categoryID === category.id.toString()}
+                    >
+                        {category.name}
+                    </MenuItem>
+                ))}
+            </Menu>
+    </>
     );
 }
 

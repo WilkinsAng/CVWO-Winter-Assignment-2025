@@ -20,6 +20,8 @@ interface TopBarProps {
     username: string | null;
     setUsername:  React.Dispatch<React.SetStateAction<string | null>>;
 }
+
+// Top Menu Bar component for the forum
 const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: TopBarProps) => {
     const [open, setOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
@@ -34,7 +36,7 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
         setUsername(null);
     }
     return (
-        <Box className="TopBar" sx={{ flexGrow: 1 }}>
+        <Box className="TopBar">
             <ThemeProvider theme={theme}>
                 <AppBar position="static" color="primary">
                     <Toolbar disableGutters>
@@ -44,43 +46,53 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
                             underline="hover"
                             variant="h5"
                             color="inherit"
-                            sx={{margin: "7px", padding: "7px"}}
+                            sx={{fontWeight: "bold", margin: "0 16px" }}
                         >
                             BinaryBuilders
                         </Link>
 
+                        {/* Spacer to push the next elements to the right */}
+                        <Box sx={{ flexGrow: 1 }} />
+
                         {isAuthenticated ?
-                            <>
-                                <Button color="inherit">
-                                    <Link component={RouterLink}
-                                          to="/my-threads"
-                                          underline="none"
-                                          color="inherit">
-                                        My Threads
-                                    </Link>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                                <Typography sx={{ fontWeight: "bold", textTransform: "capitalize" }}>
+                                    Welcome, {username}
+                                </Typography>
+
+                                <Button color="inherit"
+                                        component={RouterLink}
+                                        to="/my-threads"
+                                        sx={{
+                                            textTransform: "none"
+                                        }}>
+                                    My Threads
                                 </Button>
-                                <Button color="inherit">
-                                    <Link component={RouterLink}
-                                          to="/my-comments"
-                                          underline="none"
-                                          color="inherit">
-                                        My Comments
-                                    </Link>
+                                <Button color="inherit"
+                                        component={RouterLink}
+                                        to="/my-comments"
+                                        sx={{
+                                            textTransform: "none"
+                                        }}>
+                                    My Comments
                                 </Button>
-                                <Typography>{username}</Typography>
+
                                 <Button
                                     color="inherit"
                                     onClick={handleLogout}
-                                    sx={{justifyContent: "flex-end", margin: "auto"}}>
+                                    sx={{ textTransform: "none" }}
+                                >
                                     Logout
                                 </Button>
-                            </> :
+                            </Box>
+                            :
                             <Button
                                 color="inherit"
                                 onClick={handleOpen}
-                                sx={{justifyContent: "end", margin: "auto"}}>
+                                sx={{ textTransform: "none" }}>
                                 Login
-                            </Button>}
+                            </Button>
+                        }
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>
@@ -89,9 +101,19 @@ const TopBar= ({isAuthenticated, setIsAuthenticated, username, setUsername}: Top
                 <DialogTitle>{isLogin ? "Login" : "Signup"}</DialogTitle>
                 <DialogContent>
                     {isLogin ? (
-                        <LoginForm handleClose={handleClose} setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} onSwitch={() => setIsLogin(false)}/>
+                        <LoginForm
+                            handleClose={handleClose}
+                            setIsAuthenticated={setIsAuthenticated}
+                            setUsername={setUsername}
+                            onSwitch={() => setIsLogin(false)}
+                        />
                     ) : (
-                        <SignupForm handleClose={handleClose} setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} onSwitch={() => setIsLogin(true)}/>
+                        <SignupForm
+                            handleClose={handleClose}
+                            setIsAuthenticated={setIsAuthenticated}
+                            setUsername={setUsername}
+                            onSwitch={() => setIsLogin(true)}
+                        />
                     )}
                 </DialogContent>
             </Dialog>

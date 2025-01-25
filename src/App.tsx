@@ -7,7 +7,8 @@ import {CssBaseline} from "@mui/material";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import theme from "./styles/theme";
 import MyThreadsPage from "./components/MyPage/MyThreads";
-import MyCommentsPage from "./components/MyPage/MyComments"
+import MyCommentsPage from "./components/MyPage/MyComments";
+import Box from "@mui/material/Box";
 
 function App() {
     /**
@@ -30,6 +31,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Router>
+                <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
                 <TopBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}  setUsername={setUsername} />
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
@@ -46,6 +48,7 @@ function App() {
                     {/* <Route path="/login" element={<LoginPage />} /> */}
                     {/* <Route path="/signup" element={<SignupPage />} /> */}
                 </Routes>
+                </Box>
             </Router>
         </ThemeProvider>
 );

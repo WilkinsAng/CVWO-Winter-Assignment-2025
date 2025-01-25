@@ -16,7 +16,10 @@ import Button from "@mui/material/Button";
 import FilterButton from "./FilterButton";
 import CreateThreadForm from "./CreateThreadForm";
 import Categories from "../../models/categories";
+import {Divider} from "@mui/material";
+import ThreadCard from "./ThreadCard";
 
+// Homepage component for the forum
 const HomePage: React.FC = () => {
     //For loading in threads
     const [threads, setThreads] = useState<Threads[]>([]);
@@ -82,6 +85,7 @@ const HomePage: React.FC = () => {
         setPage(newPage);
     }
 
+    //Function to handle adding new threads into the state
     const onCreateSuccess = (newThread: Threads) =>{
         setThreads((prevThreads) => [newThread, ...prevThreads])
     }
@@ -123,56 +127,62 @@ const HomePage: React.FC = () => {
         )
     }
     return (
-        <Box sx={{padding : 4}}>
-            <Typography variant="h4" gutterBottom>
-                Threads
+        <Box sx={{ padding: 4, maxWidth: "1100px", margin: "0 auto" }}>
+            <Typography variant="h4">
+                Welcome to BinaryBuilders!
             </Typography>
-            <Button onClick={()=> setCreateThreadOpen(true)}> Create Thread!</Button>
+            <Typography variant="body1" color="text.secondary" gutterBottom>
+                Share your fitness journey here!
+            </Typography>
+
+            <Box sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 2, // margin-bottom
+            }}>
+            <Button
+                variant="contained"
+                onClick={()=> setCreateThreadOpen(true)}
+                color="primary"
+                sx={{justifyContent: "end"}}
+            >
+                Create Thread!
+            </Button>
             <CreateThreadForm
                 categories={categories}
                 open={createThreadOpen}
                 onClose={() => setCreateThreadOpen(false)}
-                onCreateSuccess={onCreateSuccess}/>
+                onCreateSuccess={onCreateSuccess}
+            />
+
             {/* Category Filter */}
-            <FilterButton categories={categories} setPage={setPage} categoryID={categoryID} setCategoryID={setCategoryID} catError={catError} />
+            <FilterButton
+                categories={categories}
+                setPage={setPage}
+                categoryID={categoryID}
+                setCategoryID={setCategoryID}
+                catError={catError}
+            />
+            </Box>
+
+            <Divider sx={{ marginBottom: 3 }}/>
+
+
             {threads.length === 0 ?
-                <Alert severity="info">No threads found for the selected category. Start creating some!</Alert> :
-                threads.map((thread: Threads) => (
-                <Card key={thread.id}
-                      sx={{ marginBottom: 2, cursor: "pointer", "&:hover": {boxShadow: 6}}}
-                      onClick={() => handleThreadOpen(thread)}>
-                    <CardContent>
-                        <Typography variant="h5">{thread.title}</Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {thread.content}
-                        </Typography>
-                        <Typography variant="body2" sx={{ mt: 1 }}>
-                            Likes: {thread.likes} | Dislikes: {thread.dislikes}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleLike(thread.id);
-                            }}>
-                            <ThumbUpIcon/>
-                        </IconButton>
-                        <IconButton
-                            size="small"
-                            color="secondary"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleDislike(thread.id)
-                            }}
-                        >
-                            <ThumbDownIcon/>
-                        </IconButton>
-                    </CardActions>
-                </Card>
-            ))}
+                <Alert severity="info">
+                    No threads found for the selected category. Start creating some!
+                </Alert>
+                : threads.map((thread: Threads) => (
+                    <ThreadCard
+                        thread={thread}
+                        handleThreadOpen={handleThreadOpen}
+                        handleDislike={handleDislike}
+                        handleLike={handleLike}
+                        categories={categories}
+                    />
+                ))}
+
             {/* Pagination Controls */}
             <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                 <Button
