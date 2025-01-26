@@ -25,7 +25,7 @@ const ThreadDetailsPage: React.FC<ThreadDetailsPageProps> = ({threadOpen, handle
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
         if (selectedThread != null) {
-            axios.get(`http://localhost:8080/threads/${selectedThread?.id}/comments`)
+            axios.get(`${process.env.REACT_APP_API_URL}/threads/${selectedThread?.id}/comments`)
                 .then(res => {
                     setComments(res.data.comments || []);
                     setError(null);

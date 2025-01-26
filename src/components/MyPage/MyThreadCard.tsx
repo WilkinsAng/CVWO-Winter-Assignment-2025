@@ -60,7 +60,8 @@ const MyThreadCard: React.FC<MyThreadCardProps> = ({thread, handleThreadOpen, ha
                 <IconButton
                     size="medium"
                     color="primary"
-                    onClick={() => {
+                    onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
                         handleUpdateThreadOpen(thread);
                     }}
                 >
@@ -69,7 +70,8 @@ const MyThreadCard: React.FC<MyThreadCardProps> = ({thread, handleThreadOpen, ha
                 <IconButton
                     size="medium"
                     color="error"
-                    onClick={() => {
+                    onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
                         handleDeleteThread(thread.id);
                     }}
                 >

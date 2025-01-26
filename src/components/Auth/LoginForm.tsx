@@ -21,7 +21,7 @@ const LoginForm: React.FC<LoginFormProps> = ({handleClose, setIsAuthenticated, s
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8080/login", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
                 username: localUsername
             });
             const {user_id, username} = response.data.user;

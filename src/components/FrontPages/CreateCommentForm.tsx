@@ -31,7 +31,7 @@ const CreateCommentForm: React.FC<CreateCommentProps> = ({selectedThread, onCrea
 
             const userID = localStorage.getItem("userID");
 
-            axios.post(`http://localhost:8080/threads/${selectedThread.id}/comments`, {
+            axios.post(`${process.env.REACT_APP_API_URL}/threads/${selectedThread.id}/comments`, {
                 content
             }, {
                 headers: {

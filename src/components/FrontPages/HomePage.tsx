@@ -5,12 +5,6 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThreadDetailsPage from "./ThreadDetailsPage";
 import Button from "@mui/material/Button";
 import FilterButton from "./FilterButton";
@@ -44,7 +38,7 @@ const HomePage: React.FC = () => {
 
     // Fetch categories when component loads
     useEffect(() => {
-        axios.get("http://localhost:8080/categories")
+        axios.get(`${process.env.REACT_APP_API_URL}/categories`)
             .then((res) => {
                 setCategories(res.data.categories);
                 setCatError(null);
@@ -58,7 +52,7 @@ const HomePage: React.FC = () => {
     // Fetch threads when page or selectedCategory changes
     useEffect(() => {
         setLoading(true);
-        axios.get("http://localhost:8080/threads", {params: {page, categoryID}})
+        axios.get(`${process.env.REACT_APP_API_URL}/threads`, {params: {page, categoryID}})
             .then(res => {
                 setThreads(res.data.threads || []);
                 setTotalPages(res.data.totalPages || 1);
@@ -91,7 +85,7 @@ const HomePage: React.FC = () => {
     }
 
     const handleLike = (id: number)  => {
-        axios.patch(`http://localhost:8080/threads/${id}/like`)
+        axios.patch(`${process.env.REACT_APP_API_URL}/threads/${id}/like`)
             .then(() => {
                 setThreads((prevThreads) => {
                     return prevThreads.map((thread) => {
@@ -102,7 +96,7 @@ const HomePage: React.FC = () => {
     }
 
     const handleDislike = (id: number)  => {
-        axios.patch(`http://localhost:8080/threads/${id}/dislike`)
+        axios.patch(`${process.env.REACT_APP_API_URL}/threads/${id}/dislike`)
             .then(() => {
                 setThreads((prevThreads) => {
                     return prevThreads.map((thread) => {

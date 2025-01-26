@@ -28,7 +28,7 @@ const MyCommentsPage: React.FC = () => {
 
     // Fetch categories when component loads
     useEffect(() => {
-        axios.get("http://localhost:8080/categories")
+        axios.get(`${process.env.REACT_APP_API_URL}/categories`)
             .then((res) => {
                 setCategories(res.data.categories);
                 setCatError(null);
@@ -48,7 +48,7 @@ const MyCommentsPage: React.FC = () => {
         }
 
         axios
-            .get(`http://localhost:8080/users/${userID}/comments`) // Replace with your API endpoint for fetching comments
+            .get(`${process.env.REACT_APP_API_URL}/users/${userID}/comments`) // Replace with your API endpoint for fetching comments
             .then((res) => {
                 setComments(res.data.comments || []);
             })
@@ -61,7 +61,7 @@ const MyCommentsPage: React.FC = () => {
     // Handle comment deletion
     const handleDeleteComment = (commentId: number) => {
         axios
-            .delete(`http://localhost:8080/comments/${commentId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}/comments/${commentId}`, {
                 headers: {
                     "userID": userID,
                     "Content-Type": "application/json"
@@ -87,7 +87,7 @@ const MyCommentsPage: React.FC = () => {
     // Handle opening thread dialog
     const handleViewThread = async (threadId: number) => {
         try {
-            const response = await axios.get(`http://localhost:8080/threads/${threadId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/threads/${threadId}`);
             setSelectedThread(response.data.thread);
             setThreadOpen(true);
         } catch (error) {

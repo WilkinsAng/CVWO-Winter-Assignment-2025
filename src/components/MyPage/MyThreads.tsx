@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Threads from "../../models/threads";
 import axios from "axios";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Card from "@mui/material/Card";
 import Alert from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
 import ThreadDetailsPage from "../FrontPages/ThreadDetailsPage";
 import UpdateThreadForm from "./UpdateThreadForm";
 import Categories from "../../models/categories";
-import ThreadCard from "../FrontPages/ThreadCard";
 import MyThreadCard from "./MyThreadCard";
 
 const MyThreadsPage: React.FC = () => {
@@ -28,7 +21,7 @@ const MyThreadsPage: React.FC = () => {
 
     // Fetch categories when component loads
     useEffect(() => {
-        axios.get("http://localhost:8080/categories")
+        axios.get(`${process.env.REACT_APP_API_URL}/categories`)
             .then((res) => {
                 setCategories(res.data.categories);
                 setCatError(null);
@@ -55,7 +48,7 @@ const MyThreadsPage: React.FC = () => {
     }
     const handleUpdateThreadClose= () => {
         setUpdateOpen(false);
-        setSelectedThread(null)
+        setSelectedThread(null);
     }
 
     const onUpdateSuccess = (updatedThread: Threads) => {
@@ -72,7 +65,7 @@ const MyThreadsPage: React.FC = () => {
             setThreads([]);
             return
         }
-        axios.get(`http://localhost:8080/users/${userID}/threads`)
+        axios.get(`${process.env.REACT_APP_API_URL}/users/${userID}/threads`)
             .then((res) => {
                 if (res.data.threads == null){
                     setThreads([]);
@@ -87,7 +80,7 @@ const MyThreadsPage: React.FC = () => {
     }, [userID]);
 
     const handleDeleteThread = (threadId: number) => {
-        axios.delete(`http://localhost:8080/threads/${threadId}`,
+        axios.delete(`${process.env.REACT_APP_API_URL}/threads/${threadId}`,
             {
                 headers: {
                     "userID": userID,

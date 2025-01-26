@@ -10,7 +10,6 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Categories from "../../models/categories";
-import Typography from "@mui/material/Typography";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 interface UpdateThreadFormProps {
@@ -37,7 +36,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
     useEffect(() => {
         if (updateOpen) {
             axios
-                .get("http://localhost:8080/categories")
+                .get(`${process.env.REACT_APP_API_URL}/categories`)
                 .then((res) => setCategories(res.data.categories))
                 .catch((err) => console.error("Error fetching categories:", err));
         }
@@ -56,7 +55,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
         if (!selectedThread) return;
 
         try {
-            const response = await axios.patch(`http://localhost:8080/threads/${selectedThread.id}`, {
+            const response = await axios.patch(`${process.env.REACT_APP_API_URL}/threads/${selectedThread.id}`, {
                     title: title,
                     content: content,
                     category_id: categoryID
@@ -68,7 +67,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                     }
 
                 });
-            onUpdateSuccess(response.data.thread); // Notify parent of the update
+            onUpdateSuccess(response.data.thread);
             handleUpdateThreadClose();
         } catch (err) {
             setError("Failed to update thread. Please try again.");
@@ -101,7 +100,7 @@ const UpdateThreadForm: React.FC<UpdateThreadFormProps> = ({
                         rows={4}
                         required
                     />
-                    <FormControl required fullWidth margin="normal">
+                    <FormControl fullWidth margin="normal">
                         <InputLabel id="category-label">Category</InputLabel>
                         <Select
                             labelId="category-label"

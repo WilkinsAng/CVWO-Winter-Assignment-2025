@@ -39,7 +39,7 @@ const UpdateCommentForm: React.FC<UpdateCommentFormProps> = ({
 
         try {
             const response = await axios.patch(
-                `http://localhost:8080/comments/${selectedComment.id}`,
+                `${process.env.REACT_APP_API_URL}/comments/${selectedComment.id}`,
                 { content } ,
                 {
                     headers: {

@@ -37,16 +37,6 @@ function App() {
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/my-threads" element={<MyThreadsPage/>}/>
                     <Route path="/my-comments" element={<MyCommentsPage/>}/>
-                    {/* Placeholder for future routes */}
-
-
-
-                    {/* Add Thread Details Page */}
-                    {/* <Route path="/threads/:id" element={<ThreadDetailsPage />} /> */}
-
-                    {/* Add Login and Signup Pages */}
-                    {/* <Route path="/login" element={<LoginPage />} /> */}
-                    {/* <Route path="/signup" element={<SignupPage />} /> */}
                 </Routes>
                 </Box>
             </Router>

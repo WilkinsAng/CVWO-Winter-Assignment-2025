@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import axios from "axios";
 import Categories from "../../models/categories";
 import Dialog from "@mui/material/Dialog";
@@ -46,7 +46,7 @@ const CreateThreadForm: React.FC<CreateThreadProps> = ({categories, open, onClos
         setError(null);
 
         const userID = localStorage.getItem("userID");
-        axios.post("http://localhost:8080/threads", {
+        axios.post(`${process.env.REACT_APP_API_URL}/threads`, {
                 title: title,
                 content: content,
                 category_id: categoryID
